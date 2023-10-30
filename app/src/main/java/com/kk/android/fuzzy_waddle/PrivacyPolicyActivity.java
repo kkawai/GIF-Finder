@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class PrivacyPolicyActivity extends AppCompatActivity {
 
-    private static final String PRIVACY_POLICY_URL = "https://raw.githack.com/kkawai/GIF-Finder/master/external/privacy_policy.html";
+    private static final String PRIVACY_POLICY_URL = "https://raw.githack.com/kkawai/GIF-Finder/main/external/privacy_policy.html";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

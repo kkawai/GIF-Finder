@@ -21,8 +21,6 @@ import androidx.loader.content.Loader;
 
 public class GiphyGifFragment extends GiphyFragment implements View.OnClickListener {
 
-    private static final String PRIVACY_POLICY_URL = "https://raw.githack.com/kkawai/GIF-Finder/master/external/privacy_policy.html";
-
     @Override
     public @NonNull
     Loader<List<GiphyImage>> onCreateLoader(int id, Bundle args) {
