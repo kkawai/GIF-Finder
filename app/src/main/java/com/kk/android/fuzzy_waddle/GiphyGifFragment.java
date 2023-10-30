@@ -21,7 +21,7 @@ import androidx.loader.content.Loader;
 
 public class GiphyGifFragment extends GiphyFragment implements View.OnClickListener {
 
-    public static final String PRIVACY_POLICY_URL = "https://raw.githack.com/kkawai/GIF-Finder/master/external/privacy_policy.html";
+    private static final String PRIVACY_POLICY_URL = "https://raw.githack.com/kkawai/GIF-Finder/master/external/privacy_policy.html";
 
     @Override
     public @NonNull
@@ -55,6 +55,6 @@ public class GiphyGifFragment extends GiphyFragment implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(PRIVACY_POLICY_URL)));
+        startActivity(new Intent(getContext(),PrivacyPolicyActivity.class));
     }
 }
