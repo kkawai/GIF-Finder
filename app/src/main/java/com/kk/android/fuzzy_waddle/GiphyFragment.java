@@ -58,7 +58,7 @@ public abstract class GiphyFragment extends Fragment implements LoaderManager.Lo
         setLayoutManager(true); //true -> use grid layout
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(giphyAdapter);
-        recyclerView.addOnScrollListener(new GiphyScrollListener());
+        recyclerView.addOnScrollListener(new GiphyScrollListener(this, giphyAdapter));
 
         LoaderManager.getInstance(this).initLoader(0, null, this);
     }
@@ -106,10 +106,18 @@ public abstract class GiphyFragment extends Fragment implements LoaderManager.Lo
         }
     }
 
-    private class GiphyScrollListener extends InfiniteScrollListener {
+    private static class GiphyScrollListener extends InfiniteScrollListener {
+
+        private Fragment fragment;
+        private GiphyAdapter giphyAdapter;
+        GiphyScrollListener(Fragment fragment, GiphyAdapter giphyAdapter) {
+            this.fragment = fragment;
+            this.giphyAdapter = giphyAdapter;
+        }
+
         @Override
         public void onLoadMore(final int currentPage) {
-            final Loader<List<GiphyImage>> loader = LoaderManager.getInstance(GiphyFragment.this).getLoader(0);
+            final Loader<List<GiphyImage>> loader = LoaderManager.getInstance(fragment).getLoader(0);
             if (loader == null) return;
 
             new AsyncTask<Void, List<GiphyImage>>() {
@@ -119,7 +127,7 @@ public abstract class GiphyFragment extends Fragment implements LoaderManager.Lo
                 }
 
                 protected void onPostExecute(List<GiphyImage> images) {
-                    if (isDetached() || isRemoving()) return;
+                    if (fragment.isDetached() || fragment.isRemoving()) return;
                     giphyAdapter.addImages(images);
                 }
             }.execute();
