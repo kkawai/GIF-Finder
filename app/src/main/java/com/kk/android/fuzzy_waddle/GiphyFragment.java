@@ -41,9 +41,9 @@ public abstract class GiphyFragment extends Fragment implements LoaderManager.Lo
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
         ViewGroup container = ViewUtil.inflate(inflater, viewGroup, R.layout.giphy_fragment);
-        this.recyclerView = ViewUtil.findById(container, R.id.giphy_list);
-        this.loadingProgress = ViewUtil.findById(container, R.id.loading_progress);
-        this.noResultsView = ViewUtil.findById(container, R.id.no_results);
+        recyclerView = ViewUtil.findById(container, R.id.giphy_list);
+        loadingProgress = ViewUtil.findById(container, R.id.loading_progress);
+        noResultsView = ViewUtil.findById(container, R.id.no_results);
 
         return container;
     }
@@ -52,31 +52,32 @@ public abstract class GiphyFragment extends Fragment implements LoaderManager.Lo
     public void onViewCreated(@NonNull View view, Bundle bundle) {
         super.onViewCreated(view, bundle);
 
-        this.giphyAdapter = new GiphyAdapter(view.getContext(), new LinkedList<>());
-        this.giphyAdapter.setListener(this);
+        giphyAdapter = new GiphyAdapter(view.getContext(), new LinkedList<>());
+        giphyAdapter.setListener(this);
 
         setLayoutManager(true); //true -> use grid layout
-        this.recyclerView.setItemAnimator(new DefaultItemAnimator());
-        this.recyclerView.setAdapter(giphyAdapter);
-        this.recyclerView.addOnScrollListener(new GiphyScrollListener());
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(giphyAdapter);
+        recyclerView.addOnScrollListener(new GiphyScrollListener());
 
         LoaderManager.getInstance(this).initLoader(0, null, this);
     }
 
     @Override
     public void onLoadFinished(@NonNull Loader<List<GiphyImage>> loader, @NonNull List<GiphyImage> data) {
-        this.loadingProgress.setVisibility(View.GONE);
+        if (isDetached() || isRemoving()) return;
+        loadingProgress.setVisibility(View.GONE);
 
         if (data.isEmpty()) noResultsView.setVisibility(View.VISIBLE);
         else noResultsView.setVisibility(View.GONE);
 
-        this.giphyAdapter.setImages(data);
+        giphyAdapter.setImages(data);
     }
 
     @Override
     public void onLoaderReset(@NonNull Loader<List<GiphyImage>> loader) {
         noResultsView.setVisibility(View.GONE);
-        this.giphyAdapter.setImages(new LinkedList<>());
+        giphyAdapter.setImages(new LinkedList<>());
     }
 
     public void setLayoutManager(boolean gridLayout) {

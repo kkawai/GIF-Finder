@@ -22,7 +22,7 @@ public abstract class AsyncTask<Params, Result> {
         });
     }
 
-    static void runOnUiThread(final Runnable runnable) {
+    private static void runOnUiThread(final Runnable runnable) {
         if (Looper.getMainLooper() == Looper.myLooper()) {
             try {
                 runnable.run();
@@ -44,7 +44,7 @@ public abstract class AsyncTask<Params, Result> {
         };
     }
 
-    static void runOnWorkerThread(final Runnable runnable) {
+    public static void runOnWorkerThread(final Runnable runnable) {
         new Thread(runnable).start();
     }
 }
