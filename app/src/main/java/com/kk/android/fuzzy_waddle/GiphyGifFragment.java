@@ -1,12 +1,8 @@
 package com.kk.android.fuzzy_waddle;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -24,12 +20,13 @@ public class GiphyGifFragment extends GiphyFragment implements View.OnClickListe
     @Override
     public @NonNull
     Loader<List<GiphyImage>> onCreateLoader(int id, Bundle args) {
-        return new GiphyGifLoader(getActivity(), searchString);
+        return new GiphyGifLoader(requireActivity(), searchString);
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
         View view = super.onCreateView(inflater, viewGroup, bundle);
+        assert view != null;
         ((SearchView) view.findViewById(R.id.gifSearchBar))
                 .setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                     @Override

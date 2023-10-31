@@ -4,7 +4,6 @@ package com.kk.android.fuzzy_waddle.net;
 import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.annimon.stream.Stream;
 import com.kk.android.fuzzy_waddle.model.GiphyImage;
@@ -21,6 +20,7 @@ import androidx.annotation.Nullable;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import timber.log.Timber;
 
 public abstract class GiphyLoader extends AsyncLoader<List<GiphyImage>> {
 
@@ -28,7 +28,7 @@ public abstract class GiphyLoader extends AsyncLoader<List<GiphyImage>> {
 
   public static int PAGE_SIZE = 30;
 
-  @Nullable private String searchString;
+  @Nullable private final String searchString;
 
   private final OkHttpClient client;
 
@@ -70,7 +70,7 @@ public abstract class GiphyLoader extends AsyncLoader<List<GiphyImage>> {
       else                 return results;
 
     } catch (IOException e) {
-      Log.w(TAG, e);
+      Timber.tag(TAG).w(e);
       return new LinkedList<>();
     }
   }
