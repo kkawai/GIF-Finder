@@ -133,8 +133,8 @@ public class GiphyFragment extends Fragment implements LoaderManager.LoaderCallb
 
     private static class GiphyScrollListener extends InfiniteScrollListener {
 
-        private Fragment fragment;
-        private GiphyAdapter giphyAdapter;
+        private final Fragment fragment;
+        private final GiphyAdapter giphyAdapter;
 
         GiphyScrollListener(Fragment fragment, GiphyAdapter giphyAdapter) {
             this.fragment = fragment;
