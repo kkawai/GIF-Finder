@@ -37,8 +37,7 @@ public class GiphyLoader extends AsyncLoader<List<GiphyImage>> {
     public GiphyLoader(@NonNull Context context, @Nullable String searchString) {
         super(context);
         this.searchString = searchString;
-        this.client = new OkHttpClient.Builder()
-                .build();
+        this.client = new OkHttpClient.Builder().build();
     }
 
     @Override
