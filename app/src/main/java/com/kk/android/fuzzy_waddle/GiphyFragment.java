@@ -1,5 +1,6 @@
 package com.kk.android.fuzzy_waddle;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
@@ -26,7 +28,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-public abstract class GiphyFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<GiphyImage>>, GiphyAdapter.OnGiphyImageClickListener {
+public class GiphyFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<GiphyImage>>,
+        GiphyAdapter.OnGiphyImageClickListener, View.OnClickListener {
 
     private static final String TAG = GiphyFragment.class.getSimpleName();
 
@@ -39,12 +42,34 @@ public abstract class GiphyFragment extends Fragment implements LoaderManager.Lo
     protected String searchString;
 
     @Override
+    public @NonNull
+    Loader<List<GiphyImage>> onCreateLoader(int id, Bundle args) {
+        return new GiphyLoader(requireActivity(), searchString);
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
         ViewGroup container = ViewUtil.inflate(inflater, viewGroup, R.layout.giphy_fragment);
         recyclerView = ViewUtil.findById(container, R.id.giphy_list);
         loadingProgress = ViewUtil.findById(container, R.id.loading_progress);
         noResultsView = ViewUtil.findById(container, R.id.no_results);
+        ((SearchView) container.findViewById(R.id.gifSearchBar))
+                .setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        if (query.length() < 2) {
+                            return false;
+                        }
+                        setSearchString(query);
+                        return false;
+                    }
 
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        return false;
+                    }
+                });
+        container.findViewById(R.id.privacy_policy).setOnClickListener(this);
         return container;
     }
 
@@ -110,6 +135,7 @@ public abstract class GiphyFragment extends Fragment implements LoaderManager.Lo
 
         private Fragment fragment;
         private GiphyAdapter giphyAdapter;
+
         GiphyScrollListener(Fragment fragment, GiphyAdapter giphyAdapter) {
             this.fragment = fragment;
             this.giphyAdapter = giphyAdapter;
@@ -123,7 +149,7 @@ public abstract class GiphyFragment extends Fragment implements LoaderManager.Lo
             new AsyncTask<Void, List<GiphyImage>>() {
                 @Override
                 protected List<GiphyImage> doInBackground(Void... params) {
-                    return ((GiphyLoader) loader).loadPage(currentPage * GiphyLoader.PAGE_SIZE);
+                    return ((GiphyLoader) loader).loadPage(currentPage * Constants.PAGE_SIZE);
                 }
 
                 protected void onPostExecute(List<GiphyImage> images) {
@@ -134,4 +160,8 @@ public abstract class GiphyFragment extends Fragment implements LoaderManager.Lo
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        startActivity(new Intent(getContext(), PrivacyPolicyActivity.class));
+    }
 }

@@ -15,15 +15,16 @@ public class MainActivity extends AppCompatActivity implements GiphyAdapter.OnGi
       getSupportActionBar().hide();
     setContentView(R.layout.activity_main);
 
-    GiphyGifFragment giphyGifFragment;
+    GiphyFragment giphyGifFragment;
     if (savedInstanceState == null) {
-      giphyGifFragment = new GiphyGifFragment();
+      giphyGifFragment = new GiphyFragment();
       getSupportFragmentManager().beginTransaction()
               .add(R.id.fragment, giphyGifFragment, "giphyGifFragment").commit();
     } else {
-      giphyGifFragment = (GiphyGifFragment) getSupportFragmentManager()
+      giphyGifFragment = (GiphyFragment) getSupportFragmentManager()
               .findFragmentByTag("giphyGifFragment");
     }
+    assert giphyGifFragment != null;
     giphyGifFragment.setClickListener(this);
   }
 
