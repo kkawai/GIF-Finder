@@ -1,4 +1,4 @@
-# Kotlin Version of GIF-Finder
+# GIF-Finder -- Kotlin Version
 
 Find GIF images and share with friends.  super fun.
 
