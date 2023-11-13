@@ -5,15 +5,15 @@ plugins {
 }
 
 android {
-    namespace = "com.kk.android.kt.gf"
+    namespace = "com.kk.android.fuzzy_waddle"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.kk.android.kt.gf"
+        applicationId = "com.kk.android.fuzzy_waddle"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 5
+        versionName = "1.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -23,7 +23,8 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isShrinkResources = true
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -97,9 +98,9 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
 
     //image downloader
-    implementation("io.coil-kt:coil-compose:2.4.0")
-    implementation("io.coil-kt:coil-gif:2.4.0")
+    //implementation("io.coil-kt:coil-compose:2.4.0")
+    //implementation("io.coil-kt:coil-gif:2.4.0")
 
-    //glide might be better than coil
+    //glide faster than coil
     implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
 }

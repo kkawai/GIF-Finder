@@ -1,0 +1,10 @@
+
+TO BUILD .APKS FILE
+java -jar "k:/users/kevin/downloads/bundletool-all-1.15.6.jar" build-apks --mode=universal --bundle=app-release.aab --output=my_app.apks
+
+To INSTALL TO DEVICE:
+java -jar "k:/users/kevin/downloads/bundletool-all-1.15.6.jar" install-apks --apks=my_app.apks
+
+
+
+
