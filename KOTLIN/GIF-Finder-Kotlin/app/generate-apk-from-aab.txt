@@ -1,4 +1,5 @@
 
+
 TO BUILD .APKS FILE
 java -jar "k:/users/kevin/downloads/bundletool-all-1.15.6.jar" build-apks --mode=universal --bundle=app-release.aab --output=my_app.apks
 
@@ -7,4 +8,7 @@ java -jar "k:/users/kevin/downloads/bundletool-all-1.15.6.jar" install-apks --ap
 
 
 
+upload symbol file: (https://www.youtube.com/watch?v=wiEZZ-30CbM)
+K:\Dev\apps\GIF-Finder\KOTLIN\GIF-Finder-Kotlin\app\build\intermediates\merged_native_libs\release\out\lib
 
+zip those folders (x86, etc..) to symbols.zip and upload those to release, app bundle (3 dots menu)
