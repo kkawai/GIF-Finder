@@ -14,7 +14,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.kk.android.fuzzy_waddle.GifFinderApplication
 import com.kk.android.fuzzy_waddle.data.GifImageRepository
 import com.kk.android.fuzzy_waddle.model.GiphyResponse
-import com.kk.android.fuzzy_waddle.util.ResourceState
+import com.kk.android.fuzzy_waddle.util.Resource
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -61,9 +61,9 @@ class GifFinderViewModel(private val gifImageRepository: GifImageRepository) : V
                 .distinctUntilChanged()
                 .onEach{ result ->
                     when (result) {
-                        is ResourceState.Success -> result.data?.let { data -> onRequestSuccess(data) }
-                        is ResourceState.Error -> onRequestError(result.message)
-                        is ResourceState.Loading -> onRequestLoading()
+                        is Resource.Success -> result.data?.let { data -> onRequestSuccess(data) }
+                        is Resource.Error -> onRequestError(result.message)
+                        is Resource.Loading -> onRequestLoading()
                     }
                 }
                 .launchIn(viewModelScope + SupervisorJob())
@@ -72,9 +72,9 @@ class GifFinderViewModel(private val gifImageRepository: GifImageRepository) : V
                 .distinctUntilChanged()
                 .onEach { result ->
                     when (result) {
-                        is ResourceState.Success -> result.data?.let { data -> onRequestSuccess(data) }
-                        is ResourceState.Error -> onRequestError(result.message)
-                        is ResourceState.Loading -> onRequestLoading()
+                        is Resource.Success -> result.data?.let { data -> onRequestSuccess(data) }
+                        is Resource.Error -> onRequestError(result.message)
+                        is Resource.Loading -> onRequestLoading()
                     }
                 }
                 .launchIn(viewModelScope + SupervisorJob())
