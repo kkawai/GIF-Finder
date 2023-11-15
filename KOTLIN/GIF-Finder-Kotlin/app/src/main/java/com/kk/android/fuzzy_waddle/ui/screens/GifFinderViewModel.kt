@@ -54,28 +54,28 @@ class GifFinderViewModel(private val gifImageRepository: GifImageRepository) : V
         getGifImages()
     }
 
+    private fun handleResult(result: Resource<GiphyResponse>) {
+        when (result) {
+            is Resource.Success -> result.data?.let { data -> onRequestSuccess(data) }
+            is Resource.Error -> onRequestError(result.message)
+            is Resource.Loading -> onRequestLoading()
+        }
+    }
+
     fun getGifImages() {
 
         if (searchTerm.isNotBlank()) {
             gifImageRepository.getGifImagesBySearchTerm(skip = _screenState.value.imageCount, searchTerm = searchTerm)
                 .distinctUntilChanged()
                 .onEach{ result ->
-                    when (result) {
-                        is Resource.Success -> result.data?.let { data -> onRequestSuccess(data) }
-                        is Resource.Error -> onRequestError(result.message)
-                        is Resource.Loading -> onRequestLoading()
-                    }
+                    handleResult(result)
                 }
                 .launchIn(viewModelScope + SupervisorJob())
         } else {
             gifImageRepository.getTrendingGifImages(skip = _screenState.value.imageCount)
                 .distinctUntilChanged()
                 .onEach { result ->
-                    when (result) {
-                        is Resource.Success -> result.data?.let { data -> onRequestSuccess(data) }
-                        is Resource.Error -> onRequestError(result.message)
-                        is Resource.Loading -> onRequestLoading()
-                    }
+                    handleResult(result)
                 }
                 .launchIn(viewModelScope + SupervisorJob())
         }
