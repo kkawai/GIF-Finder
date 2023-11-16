@@ -94,7 +94,7 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun GifImageCard(
-    gifFinderViewModel: GifFinderViewModel,
+    gifFinderViewModel: GifFinderViewModel?,
     giphyImage: GiphyImage
 ) {
 
@@ -104,7 +104,7 @@ fun GifImageCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                gifFinderViewModel.navigationState =
+                gifFinderViewModel?.navigationState =
                     NavigationState.DetailedGIFScreen(giphyImage)
             }
             .aspectRatio(giphyImage.getGifAspectRatio())

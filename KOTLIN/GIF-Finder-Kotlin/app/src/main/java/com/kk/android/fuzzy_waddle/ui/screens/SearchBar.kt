@@ -38,7 +38,7 @@ import com.kk.android.fuzzy_waddle.ui.theme.GIFFinderTheme
 
 @Composable
 fun ExpandableSearchView(
-    gifFinderViewModel: GifFinderViewModel,
+    gifFinderViewModel: GifFinderViewModel?,
     searchDisplay: String,
     onSearchDisplayChanged: (String) -> Unit,
     onSearchDisplayClosed: () -> Unit,
@@ -84,14 +84,12 @@ fun SearchIcon(iconTint: Color) {
 @Preview
 @Composable
 fun CollapsedSearchView2Preview() {
-    val gifFinderViewModel: GifFinderViewModel =
-        viewModel(factory = GifFinderViewModel.Factory)
-    CollapsedSearchView(gifFinderViewModel = gifFinderViewModel, {})
+    CollapsedSearchView(gifFinderViewModel = null, {})
 }
 
 @Composable
 fun CollapsedSearchView(
-    gifFinderViewModel: GifFinderViewModel,
+    gifFinderViewModel: GifFinderViewModel?,
     onExpandedChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     tint: Color = MaterialTheme.colorScheme.primary
@@ -108,12 +106,15 @@ fun CollapsedSearchView(
             text = stringResource(id = R.string.app_name),
             style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier
-                .padding(start = 16.dp).weight(1f)
+                .padding(start = 16.dp)
+                .weight(1f)
         )
         IconButton(onClick = { onExpandedChanged(true) }) {
             SearchIcon(iconTint = tint)
         }
-        IconButton(onClick = {gifFinderViewModel.navigationState = NavigationState.PrivacyPolicyScreen }) {
+        IconButton(onClick = {
+            gifFinderViewModel?.navigationState = NavigationState.PrivacyPolicyScreen
+        }) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_more_vert_24dp),
                 contentDescription = "overflow menu",
@@ -141,7 +142,8 @@ fun ExpandedSearchView(
         textFieldFocusRequester.requestFocus()
     }
 
-    val rememberedText = if (gifFinderViewModel != null) gifFinderViewModel.searchTerm else searchDisplay
+    val rememberedText =
+        if (gifFinderViewModel != null) gifFinderViewModel.searchTerm else searchDisplay
 
     var textFieldValue by remember {
         mutableStateOf(TextFieldValue(rememberedText, TextRange(rememberedText.length)))
@@ -191,9 +193,7 @@ fun ExpandedSearchView(
             keyboardActions = KeyboardActions(
                 onSearch = {
                     focusManager.clearFocus()
-                    if (gifFinderViewModel != null) {
-                        gifFinderViewModel.getGifImagesWithSearchTerm(textFieldValue.text)
-                    }
+                    gifFinderViewModel?.getGifImagesWithSearchTerm(textFieldValue.text)
                 }
             )
         )
@@ -203,8 +203,6 @@ fun ExpandedSearchView(
 @Preview
 @Composable
 fun CollapsedSearchViewPreview() {
-    val gifFinderViewModel: GifFinderViewModel =
-        viewModel(factory = GifFinderViewModel.Factory)
     GIFFinderTheme {
         Surface(
             color = MaterialTheme.colorScheme.primary
@@ -213,7 +211,7 @@ fun CollapsedSearchViewPreview() {
                 searchDisplay = "",
                 onSearchDisplayChanged = {},
                 onSearchDisplayClosed = {},
-                gifFinderViewModel = gifFinderViewModel
+                gifFinderViewModel = null
             )
         }
     }
@@ -222,8 +220,6 @@ fun CollapsedSearchViewPreview() {
 @Preview
 @Composable
 fun ExpandedSearchViewPreview() {
-    val gifFinderViewModel: GifFinderViewModel =
-        viewModel(factory = GifFinderViewModel.Factory)
     GIFFinderTheme {
         Surface(
             color = MaterialTheme.colorScheme.primary
@@ -233,7 +229,7 @@ fun ExpandedSearchViewPreview() {
                 onSearchDisplayChanged = {},
                 expandedInitially = true,
                 onSearchDisplayClosed = {},
-                gifFinderViewModel = gifFinderViewModel
+                gifFinderViewModel = null
             )
         }
     }

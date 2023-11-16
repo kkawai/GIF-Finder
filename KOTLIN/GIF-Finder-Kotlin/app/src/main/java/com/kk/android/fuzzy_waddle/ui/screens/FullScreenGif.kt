@@ -13,19 +13,27 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.kk.android.fuzzy_waddle.R
 import com.kk.android.fuzzy_waddle.model.GiphyImage
+import com.kk.android.fuzzy_waddle.model.ImageTypes
+
+@Preview
+@Composable
+fun FullScreenGifPreview() {
+    FullScreenGif(null, GiphyImage(ImageTypes()))
+}
 
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun FullScreenGif(gifFinderViewModel: GifFinderViewModel, giphyImage: GiphyImage) {
+fun FullScreenGif(gifFinderViewModel: GifFinderViewModel?, giphyImage: GiphyImage) {
 
     BackPressHandler(onBackPressed = {
-        gifFinderViewModel.navigationState = NavigationState.HomeScreen
+        gifFinderViewModel?.navigationState = NavigationState.HomeScreen
     })
 
     val context = LocalContext.current
@@ -44,10 +52,6 @@ fun FullScreenGif(gifFinderViewModel: GifFinderViewModel, giphyImage: GiphyImage
             modifier = Modifier
                 .align(Alignment.Center)
                 .fillMaxWidth()
-                .clickable {
-                    gifFinderViewModel.navigationState =
-                        NavigationState.DetailedGIFScreen(giphyImage)
-                }
                 .aspectRatio(giphyImage.getGifAspectRatio())
         ) {
             it

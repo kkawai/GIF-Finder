@@ -10,10 +10,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kk.android.fuzzy_waddle.Constants
 
 @Composable
-fun loadWebUrl(gifFinderViewModel: GifFinderViewModel, url: String = Constants.PRIVACY_POLICY_URL) {
+fun loadWebUrl(gifFinderViewModel: GifFinderViewModel?, url: String = Constants.PRIVACY_POLICY_URL) {
 
     BackPressHandler(onBackPressed = {
-        gifFinderViewModel.navigationState = NavigationState.HomeScreen
+        gifFinderViewModel?.navigationState = NavigationState.HomeScreen
     })
 
     val context = LocalContext.current
@@ -28,7 +28,5 @@ fun loadWebUrl(gifFinderViewModel: GifFinderViewModel, url: String = Constants.P
 @Preview
 @Composable
 fun previewLoadWebUrl() {
-    val gifFinderViewModel: GifFinderViewModel =
-        viewModel(factory = GifFinderViewModel.Factory)
-    loadWebUrl(gifFinderViewModel, url = "http://google.com")
+    loadWebUrl(null, url = "http://google.com")
 }
