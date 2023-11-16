@@ -30,7 +30,8 @@ class GifFinderViewModel(private val gifImageRepository: GifImageRepository) : V
     private val _screenState = MutableStateFlow(ScreenState())
     val screenState = _screenState.asStateFlow()
 
-    var navigationState: NavigationState by mutableStateOf(NavigationState.HomeScreen)
+    var currentScreen: CurrentScreen by mutableStateOf(CurrentScreen.HomeScreen)
+    private set
 
     //remembers scroll position across screen rotations by being in the ViewModel
     val lazyStaggeredGridState: LazyStaggeredGridState = LazyStaggeredGridState(0,0)
@@ -41,6 +42,10 @@ class GifFinderViewModel(private val gifImageRepository: GifImageRepository) : V
 
     init {
         getGifImages()
+    }
+
+    fun showScreen(newScreen: CurrentScreen) {
+        currentScreen = newScreen
     }
 
     fun getGifImagesWithSearchTerm(newSearchTerm: String) {

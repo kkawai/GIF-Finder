@@ -46,21 +46,21 @@ fun GifFinderAppUI() {
     val gifFinderViewModel: GifFinderViewModel =
         viewModel(factory = GifFinderViewModel.Factory)
 
-    val screen = gifFinderViewModel.navigationState
+    val screen = gifFinderViewModel.currentScreen
 
     when (screen) {
-        is NavigationState.HomeScreen ->
+        is CurrentScreen.HomeScreen ->
             HomeScreen(
                 gifFinderViewModel = gifFinderViewModel,
                 retryAction = { gifFinderViewModel.getGifImages() }
             )
 
-        is NavigationState.DetailedGIFScreen ->
+        is CurrentScreen.DetailedGIFScreen ->
             FullScreenGif(
                 gifFinderViewModel = gifFinderViewModel,
                 giphyImage = screen.gifImage
             )
-        is NavigationState.PrivacyPolicyScreen ->
+        is CurrentScreen.PrivacyPolicyScreen ->
             loadWebUrl(gifFinderViewModel = gifFinderViewModel)
     }
 }
@@ -104,8 +104,7 @@ fun GifImageCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                gifFinderViewModel?.navigationState =
-                    NavigationState.DetailedGIFScreen(giphyImage)
+                gifFinderViewModel?.showScreen(CurrentScreen.DetailedGIFScreen(giphyImage))
             }
             .aspectRatio(giphyImage.getGifAspectRatio())
     ) {

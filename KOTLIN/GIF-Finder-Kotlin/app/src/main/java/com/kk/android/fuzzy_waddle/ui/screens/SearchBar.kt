@@ -32,7 +32,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kk.android.fuzzy_waddle.R
 import com.kk.android.fuzzy_waddle.ui.theme.GIFFinderTheme
 
@@ -113,7 +112,7 @@ fun CollapsedSearchView(
             SearchIcon(iconTint = tint)
         }
         IconButton(onClick = {
-            gifFinderViewModel?.navigationState = NavigationState.PrivacyPolicyScreen
+            gifFinderViewModel?.showScreen(CurrentScreen.PrivacyPolicyScreen)
         }) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_more_vert_24dp),

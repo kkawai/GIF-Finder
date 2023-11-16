@@ -6,14 +6,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kk.android.fuzzy_waddle.Constants
 
 @Composable
 fun loadWebUrl(gifFinderViewModel: GifFinderViewModel?, url: String = Constants.PRIVACY_POLICY_URL) {
 
     BackPressHandler(onBackPressed = {
-        gifFinderViewModel?.navigationState = NavigationState.HomeScreen
+        gifFinderViewModel?.showScreen(CurrentScreen.HomeScreen)
     })
 
     val context = LocalContext.current

@@ -1,7 +1,6 @@
 package com.kk.android.fuzzy_waddle.ui.screens
 
 import android.content.Intent
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,7 +32,7 @@ fun FullScreenGifPreview() {
 fun FullScreenGif(gifFinderViewModel: GifFinderViewModel?, giphyImage: GiphyImage) {
 
     BackPressHandler(onBackPressed = {
-        gifFinderViewModel?.navigationState = NavigationState.HomeScreen
+        gifFinderViewModel?.showScreen(CurrentScreen.HomeScreen)
     })
 
     val context = LocalContext.current
