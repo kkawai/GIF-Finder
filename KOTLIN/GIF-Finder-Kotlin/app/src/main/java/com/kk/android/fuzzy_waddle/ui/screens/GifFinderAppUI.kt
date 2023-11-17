@@ -5,6 +5,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -12,11 +13,9 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
-import androidx.compose.foundation.progressSemantics
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
@@ -60,6 +59,7 @@ fun GifFinderAppUI() {
                 gifFinderViewModel = gifFinderViewModel,
                 giphyImage = screen.gifImage
             )
+
         is CurrentScreen.PrivacyPolicyScreen ->
             loadWebUrl(gifFinderViewModel = gifFinderViewModel)
     }
@@ -83,12 +83,10 @@ fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun LoadingScreen(modifier: Modifier = Modifier) {
-    CircularProgressIndicator(
-        modifier = modifier
-            .progressSemantics()
-            .size(Constants.CIRCLE_PROGRESS_SIZE.dp)
-    )
+fun LoadingScreen() {
+    Box(modifier = Modifier.fillMaxSize()) {
+        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+    }
 }
 
 @OptIn(ExperimentalGlideComposeApi::class)
@@ -137,73 +135,75 @@ fun HomeScreen(
             val screenState = gifFinderViewModel.screenState.collectAsState()
             val lazyGridState = gifFinderViewModel.lazyStaggeredGridState
 
-            if (!screenState.value.isLoading && screenState.value.error.isNotBlank() && screenState.value.gifImages.isEmpty()) {
-                ErrorScreen(retryAction, modifier = modifier.fillMaxSize())
-            } else if (screenState.value.isLoading && screenState.value.gifImages.isEmpty()) {
-                LoadingScreen()
-            } else {
-                Column {
+            Column {
 
-                    LazyVerticalStaggeredGrid(
-                        columns = StaggeredGridCells.Adaptive(150.dp),
-                        modifier = modifier.fillMaxWidth(),
-                        contentPadding = PaddingValues(Constants.VERTICAL_GRID_PADDING.dp),
-                        state = lazyGridState,
+                LazyVerticalStaggeredGrid(
+                    columns = StaggeredGridCells.Adaptive(150.dp),
+                    modifier = modifier.fillMaxWidth(),
+                    contentPadding = PaddingValues(Constants.VERTICAL_GRID_PADDING.dp),
+                    state = lazyGridState,
 
-                        content = {
-                            items(screenState.value.gifImages) { image ->
-                                GifImageCard(
-                                    gifFinderViewModel = gifFinderViewModel,
-                                    giphyImage = image
-                                )
-                            }
-                            item {
-                                if (screenState.value.isLoading && screenState.value.gifImages.isNotEmpty()) {
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(16.dp),
-                                        horizontalArrangement = Arrangement.Center
-                                    ) {
-                                        CircularProgressIndicator(
-                                            modifier = modifier
-                                                .progressSemantics()
-                                                .size(Constants.CIRCLE_PROGRESS_SIZE.dp)
-                                        )
-                                    }
+                    content = {
+                        items(screenState.value.gifImages) { image ->
+                            GifImageCard(
+                                gifFinderViewModel = gifFinderViewModel,
+                                giphyImage = image
+                            )
+                        }
+                        item {
+                            if (screenState.value.isLoading && screenState.value.gifImages.isNotEmpty()) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    horizontalArrangement = Arrangement.Center
+                                ) {
+                                    LoadingScreen()
                                 }
                             }
                         }
-
-                    )
-                    InfiniteListHandler(lazyGridState = lazyGridState) {
-                        Log.i(
-                            "GifFinderApp ggggg",
-                            "getting more starting at: " + screenState.value.imageCount
-                        )
-                        gifFinderViewModel.getGifImages()
                     }
+
+                )
+                InfiniteListHandler(lazyGridState = lazyGridState) {
+                    Log.i(
+                        "GifFinderApp ggggg",
+                        "getting more starting at: " + screenState.value.imageCount
+                    )
+                    gifFinderViewModel.getGifImages()
                 }
-            } //End Column
-        } //End Surface
-    }
+                if (screenState.value.isLoading && screenState.value.gifImages.isEmpty()) {
+                    LoadingScreen()
+                } else if (!screenState.value.isLoading && screenState.value.error.isNotBlank() && screenState.value.gifImages.isEmpty()) {
+                    ErrorScreen(retryAction, modifier = modifier.fillMaxSize())
+                }
+            }
+        } //End Column
+    } //End Surface
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopAppBar(gifFinderViewModel: GifFinderViewModel, scrollBehavior: TopAppBarScrollBehavior, modifier: Modifier = Modifier) {
+fun TopAppBar(
+    gifFinderViewModel: GifFinderViewModel,
+    scrollBehavior: TopAppBarScrollBehavior,
+    modifier: Modifier = Modifier
+) {
 
     CenterAlignedTopAppBar(
         scrollBehavior = scrollBehavior,
         title = {
-            ExpandableSearchView(searchDisplay = "",
+            ExpandableSearchView(
+                searchDisplay = "",
                 onSearchDisplayChanged = {
                     Log.i("ggggg", "search term: " + it)
                 },
                 onSearchDisplayClosed = {
                     Log.i("ggggg", "search display closed")
                 },
-                gifFinderViewModel = gifFinderViewModel)
+                gifFinderViewModel = gifFinderViewModel
+            )
         },
         modifier = modifier
     )
