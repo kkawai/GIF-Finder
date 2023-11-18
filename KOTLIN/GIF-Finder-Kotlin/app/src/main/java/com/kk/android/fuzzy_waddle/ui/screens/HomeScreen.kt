@@ -111,8 +111,11 @@ fun HomeScreen(
         topBar = {
             TopAppBar(
                 onOverflowMenuClicked = onOverflowMenuClicked,
-                gifFinderViewModel = gifFinderViewModel,
-                scrollBehavior = scrollBehavior
+                savedSearchTerm = gifFinderViewModel.searchTerm,
+                scrollBehavior = scrollBehavior,
+                onSearchForGif = { searchTerm ->
+                    gifFinderViewModel.getGifImagesWithSearchTerm(searchTerm)
+                }
             )
         }
     ) {
@@ -176,7 +179,8 @@ fun HomeScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBar(
-    gifFinderViewModel: GifFinderViewModel,
+    onSearchForGif: (searchTerm: String) -> Unit,
+    savedSearchTerm: String,
     onOverflowMenuClicked: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
     modifier: Modifier = Modifier
@@ -186,7 +190,7 @@ fun TopAppBar(
         scrollBehavior = scrollBehavior,
         title = {
             ExpandableSearchView(
-                searchDisplay = "",
+                savedSearchTerm = savedSearchTerm,
                 onSearchDisplayChanged = {
                     Log.i("ggggg", "search term: " + it)
                 },
@@ -194,7 +198,8 @@ fun TopAppBar(
                     Log.i("ggggg", "search display closed")
                 },
                 onOverflowMenuClicked = onOverflowMenuClicked,
-                gifFinderViewModel = gifFinderViewModel
+                onSearchForGif = onSearchForGif
+
             )
         },
         modifier = modifier

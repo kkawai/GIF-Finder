@@ -38,8 +38,8 @@ import com.kk.android.fuzzy_waddle.ui.theme.GIFFinderTheme
 @Composable
 fun ExpandableSearchView(
     onOverflowMenuClicked: () -> Unit,
-    gifFinderViewModel: GifFinderViewModel?,
-    searchDisplay: String,
+    savedSearchTerm: String,
+    onSearchForGif: (searchTerm: String) -> Unit,
     onSearchDisplayChanged: (String) -> Unit,
     onSearchDisplayClosed: () -> Unit,
     modifier: Modifier = Modifier,
@@ -53,13 +53,13 @@ fun ExpandableSearchView(
     Crossfade(targetState = expanded) { isSearchFieldVisible ->
         when (isSearchFieldVisible) {
             true -> ExpandedSearchView(
-                searchDisplay = searchDisplay,
                 onSearchDisplayChanged = onSearchDisplayChanged,
                 onSearchDisplayClosed = onSearchDisplayClosed,
                 onExpandedChanged = onExpandedChanged,
                 modifier = modifier,
                 tint = tint,
-                gifFinderViewModel = gifFinderViewModel
+                savedSearchTerm = savedSearchTerm,
+                onSearchForGif = onSearchForGif
             )
 
             false -> CollapsedSearchView(
@@ -120,8 +120,8 @@ fun CollapsedSearchView(
 
 @Composable
 fun ExpandedSearchView(
-    gifFinderViewModel: GifFinderViewModel?,
-    searchDisplay: String,
+    onSearchForGif: (searchTerm: String) -> Unit,
+    savedSearchTerm: String,
     onSearchDisplayChanged: (String) -> Unit,
     onSearchDisplayClosed: () -> Unit,
     onExpandedChanged: (Boolean) -> Unit,
@@ -136,11 +136,8 @@ fun ExpandedSearchView(
         textFieldFocusRequester.requestFocus()
     }
 
-    val rememberedText =
-        if (gifFinderViewModel != null) gifFinderViewModel.searchTerm else searchDisplay
-
     var textFieldValue by remember {
-        mutableStateOf(TextFieldValue(rememberedText, TextRange(rememberedText.length)))
+        mutableStateOf(TextFieldValue(savedSearchTerm, TextRange(savedSearchTerm.length)))
     }
 
     val close = {
@@ -187,7 +184,7 @@ fun ExpandedSearchView(
             keyboardActions = KeyboardActions(
                 onSearch = {
                     focusManager.clearFocus()
-                    gifFinderViewModel?.getGifImagesWithSearchTerm(textFieldValue.text)
+                    onSearchForGif(textFieldValue.text)
                 }
             )
         )
@@ -208,11 +205,11 @@ fun CollapsedSearchViewPreview() {
             color = MaterialTheme.colorScheme.primary
         ) {
             ExpandableSearchView(
-                searchDisplay = "",
                 onSearchDisplayChanged = {},
                 onSearchDisplayClosed = {},
-                gifFinderViewModel = null,
-                onOverflowMenuClicked = {}
+                onOverflowMenuClicked = {},
+                savedSearchTerm = "",
+                onSearchForGif = {}
             )
         }
     }
@@ -226,12 +223,12 @@ fun ExpandedSearchViewPreview() {
             color = MaterialTheme.colorScheme.primary
         ) {
             ExpandableSearchView(
-                searchDisplay = "",
                 onSearchDisplayChanged = {},
                 expandedInitially = true,
                 onSearchDisplayClosed = {},
-                gifFinderViewModel = null,
-                onOverflowMenuClicked = {}
+                onOverflowMenuClicked = {},
+                savedSearchTerm = "",
+                onSearchForGif = {}
             )
         }
     }
