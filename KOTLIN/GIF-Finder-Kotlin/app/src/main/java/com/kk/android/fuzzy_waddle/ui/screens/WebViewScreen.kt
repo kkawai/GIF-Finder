@@ -9,11 +9,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.kk.android.fuzzy_waddle.Constants
 
 @Composable
-fun loadWebUrl(gifFinderViewModel: GifFinderViewModel?, url: String = Constants.PRIVACY_POLICY_URL) {
-
-    BackPressHandler(onBackPressed = {
-        gifFinderViewModel?.showScreen(CurrentScreen.HomeScreen)
-    })
+fun WebViewScreen(url: String = Constants.PRIVACY_POLICY_URL) {
 
     val context = LocalContext.current
     AndroidView(factory = {
@@ -27,5 +23,5 @@ fun loadWebUrl(gifFinderViewModel: GifFinderViewModel?, url: String = Constants.
 @Preview
 @Composable
 fun previewLoadWebUrl() {
-    loadWebUrl(null, url = "http://google.com")
+    WebViewScreen("http://google.com")
 }

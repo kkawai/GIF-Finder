@@ -37,6 +37,7 @@ import com.kk.android.fuzzy_waddle.ui.theme.GIFFinderTheme
 
 @Composable
 fun ExpandableSearchView(
+    onOverflowMenuClicked: () -> Unit,
     gifFinderViewModel: GifFinderViewModel?,
     searchDisplay: String,
     onSearchDisplayChanged: (String) -> Unit,
@@ -62,10 +63,10 @@ fun ExpandableSearchView(
             )
 
             false -> CollapsedSearchView(
-                gifFinderViewModel = gifFinderViewModel,
                 onExpandedChanged = onExpandedChanged,
                 modifier = modifier,
-                tint = tint
+                tint = tint,
+                onOverflowMenuClicked = onOverflowMenuClicked
             )
         }
     }
@@ -80,15 +81,9 @@ fun SearchIcon(iconTint: Color) {
     )
 }
 
-@Preview
-@Composable
-fun CollapsedSearchView2Preview() {
-    CollapsedSearchView(gifFinderViewModel = null, {})
-}
-
 @Composable
 fun CollapsedSearchView(
-    gifFinderViewModel: GifFinderViewModel?,
+    onOverflowMenuClicked: () -> Unit,
     onExpandedChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     tint: Color = MaterialTheme.colorScheme.primary
@@ -112,7 +107,7 @@ fun CollapsedSearchView(
             SearchIcon(iconTint = tint)
         }
         IconButton(onClick = {
-            gifFinderViewModel?.showScreen(CurrentScreen.PrivacyPolicyScreen)
+            onOverflowMenuClicked()
         }) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_more_vert_24dp),
@@ -201,6 +196,12 @@ fun ExpandedSearchView(
 
 @Preview
 @Composable
+fun CollapsedSearchView2Preview() {
+    CollapsedSearchView({}, {})
+}
+
+@Preview
+@Composable
 fun CollapsedSearchViewPreview() {
     GIFFinderTheme {
         Surface(
@@ -210,7 +211,8 @@ fun CollapsedSearchViewPreview() {
                 searchDisplay = "",
                 onSearchDisplayChanged = {},
                 onSearchDisplayClosed = {},
-                gifFinderViewModel = null
+                gifFinderViewModel = null,
+                onOverflowMenuClicked = {}
             )
         }
     }
@@ -228,7 +230,8 @@ fun ExpandedSearchViewPreview() {
                 onSearchDisplayChanged = {},
                 expandedInitially = true,
                 onSearchDisplayClosed = {},
-                gifFinderViewModel = null
+                gifFinderViewModel = null,
+                onOverflowMenuClicked = {}
             )
         }
     }

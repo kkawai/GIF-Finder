@@ -1,6 +1,7 @@
 package com.kk.android.fuzzy_waddle.ui.screens
 
 import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,46 +18,44 @@ import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.kk.android.fuzzy_waddle.R
-import com.kk.android.fuzzy_waddle.model.GiphyImage
-import com.kk.android.fuzzy_waddle.model.ImageTypes
+import com.kk.android.fuzzy_waddle.util.Util
 
 @Preview
 @Composable
 fun FullScreenGifPreview() {
-    FullScreenGif(null, GiphyImage(ImageTypes()))
+    FullScreenGif("", 1.5f)
 }
-
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun FullScreenGif(gifFinderViewModel: GifFinderViewModel?, giphyImage: GiphyImage) {
+fun FullScreenGif(gifImageUrl: String, gifImageAspectRatio: Float) {
 
-    BackPressHandler(onBackPressed = {
-        gifFinderViewModel?.showScreen(CurrentScreen.HomeScreen)
-    })
+    val gifImageUrlDecoded = Util.decodeString(gifImageUrl)
+
+    Log.d("ddddd", "gifImageUrl: " + gifImageUrlDecoded)
 
     val context = LocalContext.current
     val share = {
         val sendIntent = Intent()
         sendIntent.action = Intent.ACTION_SEND
-        sendIntent.putExtra(Intent.EXTRA_TEXT, giphyImage.gifUrl())
+        sendIntent.putExtra(Intent.EXTRA_TEXT, gifImageUrl)
         sendIntent.type = "text/plain"
         context.startActivity(Intent.createChooser(sendIntent, null))
     }
 
     Box() {
         GlideImage(
-            model = giphyImage.gifUrl(),
+            model = gifImageUrlDecoded,
             contentDescription = "LoadImage",
             modifier = Modifier
                 .align(Alignment.Center)
                 .fillMaxWidth()
-                .aspectRatio(giphyImage.getGifAspectRatio())
+                .aspectRatio(gifImageAspectRatio)
         ) {
             it
                 .error(R.drawable.ic_broken_image)
                 .placeholder(R.drawable.loading_img)
-                .load(giphyImage.gifUrl())
+                .load(gifImageUrlDecoded)
         }
 
         IconButton(

@@ -27,14 +27,11 @@ import java.util.stream.Collectors
 
 class GifFinderViewModel(private val gifImageRepository: GifImageRepository) : ViewModel() {
 
-    private val _screenState = MutableStateFlow(ScreenState())
-    val screenState = _screenState.asStateFlow()
-
-    var currentScreen: CurrentScreen by mutableStateOf(CurrentScreen.HomeScreen)
-    private set
+    private val _homeScreenState = MutableStateFlow(HomeScreenState())
+    val homeScreenState = _homeScreenState.asStateFlow()
 
     //remembers scroll position across screen rotations by being in the ViewModel
-    val lazyStaggeredGridState: LazyStaggeredGridState = LazyStaggeredGridState(0,0)
+    val lazyStaggeredGridState: LazyStaggeredGridState = LazyStaggeredGridState(0, 0)
 
     //remember searchTerm in the expandable SearchBar
     var searchTerm: String by mutableStateOf("")
@@ -44,17 +41,13 @@ class GifFinderViewModel(private val gifImageRepository: GifImageRepository) : V
         getGifImages()
     }
 
-    fun showScreen(newScreen: CurrentScreen) {
-        currentScreen = newScreen
-    }
-
     fun getGifImagesWithSearchTerm(newSearchTerm: String) {
 
         if (!searchTerm.equals(newSearchTerm)) {
             searchTerm = newSearchTerm
-            i = 1
-            _screenState.value.imageCount = 0
-            _screenState.value.gifImages = emptyList()
+            basicSessionImageKey = 1
+            _homeScreenState.value.imageCount = 0
+            _homeScreenState.value.gifImages = emptyList()
         }
         getGifImages()
     }
@@ -70,14 +63,17 @@ class GifFinderViewModel(private val gifImageRepository: GifImageRepository) : V
     fun getGifImages() {
 
         if (searchTerm.isNotBlank()) {
-            gifImageRepository.getGifImagesBySearchTerm(skip = _screenState.value.imageCount, searchTerm = searchTerm)
+            gifImageRepository.getGifImagesBySearchTerm(
+                skip = _homeScreenState.value.imageCount,
+                searchTerm = searchTerm
+            )
                 .distinctUntilChanged()
-                .onEach{ result ->
+                .onEach { result ->
                     handleResult(result)
                 }
                 .launchIn(viewModelScope + SupervisorJob())
         } else {
-            gifImageRepository.getTrendingGifImages(skip = _screenState.value.imageCount)
+            gifImageRepository.getTrendingGifImages(skip = _homeScreenState.value.imageCount)
                 .distinctUntilChanged()
                 .onEach { result ->
                     handleResult(result)
@@ -87,25 +83,30 @@ class GifFinderViewModel(private val gifImageRepository: GifImageRepository) : V
     }
 
     companion object {
+
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as GifFinderApplication)
-                val gifImageRepository = application.appContainer.gifImageRepository
-                GifFinderViewModel(gifImageRepository = gifImageRepository)
+                val application =
+                    (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as GifFinderApplication)
+                GifFinderViewModel(gifImageRepository = application.appContainer.gifImageRepository)
             }
         }
     }
 
-    private var i : Int = 1
+    private var basicSessionImageKey: Int = 1
 
     private fun onRequestSuccess(giphyResponse: GiphyResponse) {
 
         val newGifImages = giphyResponse.data.stream()
-            .filter { gif -> gif.setTempKey(i++) > 0 && !TextUtils.isEmpty(gif.gifUrl()) && !TextUtils.isEmpty(gif.gifMmsUrl()) && !TextUtils.isEmpty(gif.stillUrl())}
+            .filter { gif ->
+                gif.setTempKey(basicSessionImageKey++) > 0 && !TextUtils.isEmpty(gif.gifUrl()) && !TextUtils.isEmpty(
+                    gif.gifMmsUrl()
+                ) && !TextUtils.isEmpty(gif.stillUrl())
+            }
             .collect(Collectors.toList())
 
-        Log.i("GifFinderViewModel ggggg","newGifImages: " + newGifImages.size)
-        _screenState.update {
+        Log.i("GifFinderViewModel ggggg", "newGifImages: " + newGifImages.size)
+        _homeScreenState.update {
             it.copy(
                 isLoading = false,
                 gifImages = it.gifImages + newGifImages,
@@ -117,16 +118,16 @@ class GifFinderViewModel(private val gifImageRepository: GifImageRepository) : V
     }
 
     private fun onRequestError(error: String?) {
-        _screenState.update {
+        _homeScreenState.update {
             it.copy(
                 isLoading = false,
-                error = error?: "Unexpected error",
+                error = error ?: "Unexpected error",
             )
         }
     }
 
     private fun onRequestLoading() {
-        _screenState.update {
+        _homeScreenState.update {
             it.copy(
                 isLoading = true
             )

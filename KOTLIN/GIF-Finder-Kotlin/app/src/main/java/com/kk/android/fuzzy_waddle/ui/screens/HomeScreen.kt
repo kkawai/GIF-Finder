@@ -33,37 +33,12 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.kk.android.fuzzy_waddle.Constants
 import com.kk.android.fuzzy_waddle.R
 import com.kk.android.fuzzy_waddle.model.GiphyImage
-
-@Composable
-fun GifFinderAppUI() {
-    val gifFinderViewModel: GifFinderViewModel =
-        viewModel(factory = GifFinderViewModel.Factory)
-
-    val screen = gifFinderViewModel.currentScreen
-
-    when (screen) {
-        is CurrentScreen.HomeScreen ->
-            HomeScreen(
-                gifFinderViewModel = gifFinderViewModel,
-                retryAction = { gifFinderViewModel.getGifImages() }
-            )
-
-        is CurrentScreen.DetailedGIFScreen ->
-            FullScreenGif(
-                gifFinderViewModel = gifFinderViewModel,
-                giphyImage = screen.gifImage
-            )
-
-        is CurrentScreen.PrivacyPolicyScreen ->
-            loadWebUrl(gifFinderViewModel = gifFinderViewModel)
-    }
-}
+import com.kk.android.fuzzy_waddle.util.Util
 
 @Composable
 fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
@@ -92,7 +67,7 @@ fun LoadingScreen() {
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun GifImageCard(
-    gifFinderViewModel: GifFinderViewModel?,
+    onGifImageClicked: (gifImageUrl: String, gifImageAspectRatio: Float) -> Unit,
     giphyImage: GiphyImage
 ) {
 
@@ -102,7 +77,14 @@ fun GifImageCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                gifFinderViewModel?.showScreen(CurrentScreen.DetailedGIFScreen(giphyImage))
+                giphyImage
+                    .gifUrl()
+                    ?.let { gifUrl ->
+                        val url = Util.encodeString(gifUrl)
+                        Log.d("ddddd", "encoded url: "+url)
+                        onGifImageClicked(url, giphyImage.getGifAspectRatio())
+                        Log.d("ddddd", "decoded url: "+Util.decodeString(url))
+                    }
             }
             .aspectRatio(giphyImage.getGifAspectRatio())
     ) {
@@ -116,6 +98,8 @@ fun GifImageCard(
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
+    onOverflowMenuClicked: () -> Unit,
+    onGifImageClicked: (gifImageUrl: String, gifImageAspectRatio: Float) -> Unit,
     gifFinderViewModel: GifFinderViewModel,
     retryAction: () -> Unit,
     modifier: Modifier = Modifier,
@@ -124,7 +108,13 @@ fun HomeScreen(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = { TopAppBar(gifFinderViewModel, scrollBehavior = scrollBehavior) }
+        topBar = {
+            TopAppBar(
+                onOverflowMenuClicked = onOverflowMenuClicked,
+                gifFinderViewModel = gifFinderViewModel,
+                scrollBehavior = scrollBehavior
+            )
+        }
     ) {
         Surface(
             modifier = Modifier
@@ -132,7 +122,7 @@ fun HomeScreen(
                 .padding(it)
         ) {
 
-            val screenState = gifFinderViewModel.screenState.collectAsState()
+            val screenState = gifFinderViewModel.homeScreenState.collectAsState()
             val lazyGridState = gifFinderViewModel.lazyStaggeredGridState
 
             Column {
@@ -146,7 +136,7 @@ fun HomeScreen(
                     content = {
                         items(screenState.value.gifImages) { image ->
                             GifImageCard(
-                                gifFinderViewModel = gifFinderViewModel,
+                                onGifImageClicked = onGifImageClicked,
                                 giphyImage = image
                             )
                         }
@@ -187,6 +177,7 @@ fun HomeScreen(
 @Composable
 fun TopAppBar(
     gifFinderViewModel: GifFinderViewModel,
+    onOverflowMenuClicked: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
     modifier: Modifier = Modifier
 ) {
@@ -202,6 +193,7 @@ fun TopAppBar(
                 onSearchDisplayClosed = {
                     Log.i("ggggg", "search display closed")
                 },
+                onOverflowMenuClicked = onOverflowMenuClicked,
                 gifFinderViewModel = gifFinderViewModel
             )
         },

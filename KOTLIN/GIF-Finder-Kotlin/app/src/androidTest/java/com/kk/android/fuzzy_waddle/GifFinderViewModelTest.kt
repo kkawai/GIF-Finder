@@ -1,9 +1,9 @@
 package com.kk.android.fuzzy_waddle
 
+import androidx.lifecycle.SavedStateHandle
 import com.kk.android.fuzzy_waddle.ui.screens.GifFinderViewModel
-import com.kk.android.fuzzy_waddle.ui.screens.CurrentScreen
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import rules.TestDispatcherRule
@@ -29,12 +29,12 @@ class GifFinderViewModelTest {
     @Test
     fun testViewModel() {
         runTest {
-            val viewModel = GifFinderViewModel(gifImageRepository = FakeGifImageRepository())
-            assertEquals(CurrentScreen.HomeScreen, viewModel.currentScreen)
-            assertEquals(viewModel.screenState.value.imageCount, 0)
-            assertEquals(true, viewModel.screenState.value.isEndReached)
-            assertEquals(viewModel.screenState.value.gifImages.size, 0)
-            assertEquals(viewModel.screenState.value.error, "")
+            val viewModel =
+                GifFinderViewModel(gifImageRepository = FakeGifImageRepository())
+            assertEquals(viewModel.homeScreenState.value.imageCount, 0)
+            assertEquals(true, viewModel.homeScreenState.value.isEndReached)
+            assertEquals(viewModel.homeScreenState.value.gifImages.size, 0)
+            assertEquals(viewModel.homeScreenState.value.error, "")
         }
     }
 
