@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">GIF Finder</string>
+    <string name="giphy_fragment__nothing_found">Nothing found</string>
+    <string name="share">Share</string>
+    <string name="privacy_policy">Privacy Policy</string>
+
+</resources>
