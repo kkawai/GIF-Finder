@@ -1,4 +1,4 @@
-# GIF-Finder -- Kotlin Version
+# GIF-Finder -- Kotlin, JetPack Compose, MVVM, Retrofit, Manual Dependency Injection, NavController, StateFlow, INFINITE Image Srolling via Staggered Grid, Toolbar Search
 
 Find GIF images and share with friends.  super fun.
 
