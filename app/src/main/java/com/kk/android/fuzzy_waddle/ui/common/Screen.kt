@@ -1,4 +1,4 @@
-package com.kk.android.fuzzy_waddle.ui.screens
+package com.kk.android.fuzzy_waddle.ui.common
 
 sealed class Screen(val route: String) {
     object HomeScreen : Screen("home_screen")

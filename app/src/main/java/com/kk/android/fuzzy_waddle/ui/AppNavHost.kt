@@ -1,4 +1,4 @@
-package com.kk.android.fuzzy_waddle.ui.screens
+package com.kk.android.fuzzy_waddle.ui
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -7,6 +7,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.kk.android.fuzzy_waddle.ui.common.Screen
+import com.kk.android.fuzzy_waddle.ui.details_screen.FullScreenGif
+import com.kk.android.fuzzy_waddle.ui.home_screen.GifFinderViewModel
+import com.kk.android.fuzzy_waddle.ui.home_screen.HomeScreen
+import com.kk.android.fuzzy_waddle.ui.privacy_policy.WebViewScreen
 
 @Composable
 fun AppNavHost() {

@@ -1,4 +1,4 @@
-package com.kk.android.fuzzy_waddle.ui.screens
+package com.kk.android.fuzzy_waddle.ui.home_screen
 
 import com.kk.android.fuzzy_waddle.model.GiphyImage
 

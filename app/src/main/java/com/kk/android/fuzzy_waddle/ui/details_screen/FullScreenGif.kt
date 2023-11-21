@@ -1,4 +1,4 @@
-package com.kk.android.fuzzy_waddle.ui.screens
+package com.kk.android.fuzzy_waddle.ui.details_screen
 
 import android.content.Intent
 import android.util.Log

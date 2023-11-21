@@ -1,4 +1,4 @@
-package com.kk.android.fuzzy_waddle.ui.screens
+package com.kk.android.fuzzy_waddle.ui.common
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Arrangement

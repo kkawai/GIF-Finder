@@ -1,7 +1,6 @@
 package com.kk.android.fuzzy_waddle
 
-import androidx.lifecycle.SavedStateHandle
-import com.kk.android.fuzzy_waddle.ui.screens.GifFinderViewModel
+import com.kk.android.fuzzy_waddle.ui.home_screen.GifFinderViewModel
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule

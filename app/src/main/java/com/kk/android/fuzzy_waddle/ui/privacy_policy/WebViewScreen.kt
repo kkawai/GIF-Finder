@@ -1,4 +1,4 @@
-package com.kk.android.fuzzy_waddle.ui.screens
+package com.kk.android.fuzzy_waddle.ui.privacy_policy
 
 import android.webkit.WebView
 import android.webkit.WebViewClient

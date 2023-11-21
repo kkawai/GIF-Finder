@@ -1,4 +1,4 @@
-package com.kk.android.fuzzy_waddle.ui.screens
+package com.kk.android.fuzzy_waddle.ui.home_screen
 
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -38,6 +38,8 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.kk.android.fuzzy_waddle.Constants
 import com.kk.android.fuzzy_waddle.R
 import com.kk.android.fuzzy_waddle.model.GiphyImage
+import com.kk.android.fuzzy_waddle.ui.common.ExpandableSearchView
+import com.kk.android.fuzzy_waddle.ui.common.InfiniteListHandler
 import com.kk.android.fuzzy_waddle.util.Util
 
 @Composable
