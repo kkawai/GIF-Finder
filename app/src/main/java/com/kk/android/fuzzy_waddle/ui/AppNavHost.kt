@@ -37,7 +37,7 @@ fun AppNavHost() {
                 searchTermHolder = viewModel.searchTermHolder,
                 stateFlow = viewModel.homeScreenState,
                 getGifImages = {viewModel.getGifImages()},
-                getGifImagesWithSearchTerm = { term -> viewModel.getGifImagesWithSearchTerm(term) },
+                getGifImagesWithSearchTerm = { searchTerm -> viewModel.getGifImagesWithSearchTerm(searchTerm) },
                 lazyStaggeredGridState = viewModel.lazyStaggeredGridState,
                 retryAction = { viewModel.getGifImages() })
         }
