@@ -34,8 +34,10 @@ class GifFinderViewModel(private val gifImageRepository: GifImageRepository) : V
     val lazyStaggeredGridState: LazyStaggeredGridState = LazyStaggeredGridState(0, 0)
 
     //remember searchTerm in the expandable SearchBar
-    var searchTerm: String by mutableStateOf("")
-        private set
+    //var searchTerm: String by mutableStateOf("")
+    //    private set
+
+    val stringHolder: StringHolder = StringHolder()
 
     init {
         getGifImages()
@@ -43,8 +45,8 @@ class GifFinderViewModel(private val gifImageRepository: GifImageRepository) : V
 
     fun getGifImagesWithSearchTerm(newSearchTerm: String) {
 
-        if (!searchTerm.equals(newSearchTerm)) {
-            searchTerm = newSearchTerm
+        if (!stringHolder.searchTerm.equals(newSearchTerm)) {
+            stringHolder.searchTerm = newSearchTerm
             basicSessionImageKey = 1
             _homeScreenState.value.imageCount = 0
             _homeScreenState.value.gifImages = emptyList()
@@ -62,10 +64,10 @@ class GifFinderViewModel(private val gifImageRepository: GifImageRepository) : V
 
     fun getGifImages() {
 
-        if (searchTerm.isNotBlank()) {
+        if (stringHolder.searchTerm.isNotBlank()) {
             gifImageRepository.getGifImagesBySearchTerm(
                 skip = _homeScreenState.value.imageCount,
-                searchTerm = searchTerm
+                searchTerm = stringHolder.searchTerm
             )
                 .distinctUntilChanged()
                 .onEach { result ->

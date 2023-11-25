@@ -110,7 +110,7 @@ fun HomeScreen(
     onGifImageClicked: (gifImageUrl: String, gifImageAspectRatio: Float) -> Unit,
     retryAction: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: GifFinderViewModel,
+    searchTermHolder: StringHolder,
 ) {
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -118,7 +118,7 @@ fun HomeScreen(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopAppBar(
-                savedSearchTerm = viewModel.searchTerm,
+                savedSearchTerm = searchTermHolder.searchTerm,
                 onOverflowMenuClicked = onOverflowMenuClicked,
                 scrollBehavior = scrollBehavior,
                 onSearchForGif = { searchTerm ->
