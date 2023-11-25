@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
@@ -41,6 +42,7 @@ import com.kk.android.fuzzy_waddle.model.GiphyImage
 import com.kk.android.fuzzy_waddle.ui.common.ExpandableSearchView
 import com.kk.android.fuzzy_waddle.ui.common.InfiniteListHandler
 import com.kk.android.fuzzy_waddle.util.Util
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
@@ -101,10 +103,14 @@ fun GifImageCard(
 @Composable
 fun HomeScreen(
     onOverflowMenuClicked: () -> Unit,
+    stateFlow: StateFlow<HomeScreenState>,
+    getGifImagesWithSearchTerm: (searchTerm: String) -> Unit,
+    lazyStaggeredGridState: LazyStaggeredGridState,
+    getGifImages: ()-> Unit,
     onGifImageClicked: (gifImageUrl: String, gifImageAspectRatio: Float) -> Unit,
-    gifFinderViewModel: GifFinderViewModel,
     retryAction: () -> Unit,
     modifier: Modifier = Modifier,
+    viewModel: GifFinderViewModel,
 ) {
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -112,11 +118,11 @@ fun HomeScreen(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopAppBar(
+                savedSearchTerm = viewModel.searchTerm,
                 onOverflowMenuClicked = onOverflowMenuClicked,
-                savedSearchTerm = gifFinderViewModel.searchTerm,
                 scrollBehavior = scrollBehavior,
                 onSearchForGif = { searchTerm ->
-                    gifFinderViewModel.getGifImagesWithSearchTerm(searchTerm)
+                    getGifImagesWithSearchTerm( searchTerm )
                 }
             )
         }
@@ -127,8 +133,8 @@ fun HomeScreen(
                 .padding(it)
         ) {
 
-            val screenState = gifFinderViewModel.homeScreenState.collectAsState()
-            val lazyGridState = gifFinderViewModel.lazyStaggeredGridState
+            val screenState = stateFlow.collectAsState()
+            val lazyGridState = lazyStaggeredGridState
 
             Column {
 
@@ -165,7 +171,7 @@ fun HomeScreen(
                         "GifFinderApp ggggg",
                         "getting more starting at: " + screenState.value.imageCount
                     )
-                    gifFinderViewModel.getGifImages()
+                    getGifImages()
                 }
                 if (screenState.value.isLoading && screenState.value.gifImages.isEmpty()) {
                     LoadingScreen()

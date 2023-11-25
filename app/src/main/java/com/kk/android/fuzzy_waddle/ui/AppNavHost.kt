@@ -16,9 +16,6 @@ import com.kk.android.fuzzy_waddle.ui.privacy_policy.WebViewScreen
 @Composable
 fun AppNavHost() {
 
-    val gifFinderViewModel: GifFinderViewModel =
-        viewModel(factory = GifFinderViewModel.Factory)
-
     val navController = rememberNavController()
     NavHost(
         navController = navController,
@@ -28,6 +25,8 @@ fun AppNavHost() {
         composable(
             Screen.HomeScreen.route
         ) {
+            val viewModel: GifFinderViewModel =
+                viewModel(factory = GifFinderViewModel.Factory)
             HomeScreen(
                 onOverflowMenuClicked = {
                     navController.navigate(Screen.PrivacyPolicyScreen.route)
@@ -35,8 +34,12 @@ fun AppNavHost() {
                 onGifImageClicked = { gifImageUrl, gifImageAspectRatio ->
                     navController.navigate(Screen.DetailedGIFScreen.route + "/${gifImageUrl}/${gifImageAspectRatio}")
                 },
-                gifFinderViewModel = gifFinderViewModel,
-                retryAction = { gifFinderViewModel.getGifImages() })
+                viewModel = viewModel,
+                stateFlow = viewModel.homeScreenState,
+                getGifImages = {viewModel.getGifImages()},
+                getGifImagesWithSearchTerm = { term -> viewModel.getGifImagesWithSearchTerm(term) },
+                lazyStaggeredGridState = viewModel.lazyStaggeredGridState,
+                retryAction = { viewModel.getGifImages() })
         }
 
         composable(
