@@ -39,7 +39,7 @@ import com.kk.android.fuzzy_waddle.ui.theme.GIFFinderTheme
 fun ExpandableSearchView(
     onOverflowMenuClicked: () -> Unit,
     savedSearchTerm: String,
-    onSearchForGif: (searchTerm: String) -> Unit,
+    onSearchForGif: () -> Unit,
     onSearchDisplayChanged: (String) -> Unit,
     onSearchDisplayClosed: () -> Unit,
     modifier: Modifier = Modifier,
@@ -120,7 +120,7 @@ fun CollapsedSearchView(
 
 @Composable
 fun ExpandedSearchView(
-    onSearchForGif: (searchTerm: String) -> Unit,
+    onSearchForGif: () -> Unit,
     savedSearchTerm: String,
     onSearchDisplayChanged: (String) -> Unit,
     onSearchDisplayClosed: () -> Unit,
@@ -184,7 +184,7 @@ fun ExpandedSearchView(
             keyboardActions = KeyboardActions(
                 onSearch = {
                     focusManager.clearFocus()
-                    onSearchForGif(textFieldValue.text)
+                    onSearchForGif()
                 }
             )
         )

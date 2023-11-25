@@ -34,10 +34,11 @@ fun AppNavHost() {
                 onGifImageClicked = { gifImageUrl, gifImageAspectRatio ->
                     navController.navigate(Screen.DetailedGIFScreen.route + "/${gifImageUrl}/${gifImageAspectRatio}")
                 },
+                onSearchDisplayChanged = { text-> viewModel.searchTermHolder.searchTerm = text },
                 searchTermHolder = viewModel.searchTermHolder,
                 stateFlow = viewModel.homeScreenState,
                 getGifImages = {viewModel.getGifImages()},
-                getGifImagesWithSearchTerm = { searchTerm -> viewModel.getGifImagesWithSearchTerm(searchTerm) },
+                getGifImagesWithSearchTerm = { viewModel.getGifImagesWithSearchTerm() },
                 lazyStaggeredGridState = viewModel.lazyStaggeredGridState,
                 retryAction = { viewModel.getGifImages() })
         }

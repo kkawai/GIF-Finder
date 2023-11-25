@@ -40,14 +40,10 @@ class GifFinderViewModel(private val gifImageRepository: GifImageRepository) : V
         getGifImages()
     }
 
-    fun getGifImagesWithSearchTerm(newSearchTerm: String) {
-
-        if (!searchTermHolder.searchTerm.equals(newSearchTerm)) {
-            searchTermHolder.searchTerm = newSearchTerm
-            basicSessionImageKey = 1
-            _homeScreenState.value.imageCount = 0
-            _homeScreenState.value.gifImages = emptyList()
-        }
+    fun getGifImagesWithSearchTerm() {
+        basicSessionImageKey = 1
+        _homeScreenState.value.imageCount = 0
+        _homeScreenState.value.gifImages = emptyList()
         getGifImages()
     }
 

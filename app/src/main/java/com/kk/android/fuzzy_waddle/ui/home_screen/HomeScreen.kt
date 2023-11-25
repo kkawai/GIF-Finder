@@ -102,9 +102,10 @@ fun GifImageCard(
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
+    onSearchDisplayChanged: (text: String) -> Unit,
     onOverflowMenuClicked: () -> Unit,
     stateFlow: StateFlow<HomeScreenState>,
-    getGifImagesWithSearchTerm: (searchTerm: String) -> Unit,
+    getGifImagesWithSearchTerm: () -> Unit,
     lazyStaggeredGridState: LazyStaggeredGridState,
     getGifImages: ()-> Unit,
     onGifImageClicked: (gifImageUrl: String, gifImageAspectRatio: Float) -> Unit,
@@ -118,11 +119,11 @@ fun HomeScreen(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopAppBar(
+                onSearchDisplayChanged = onSearchDisplayChanged,
                 savedSearchTerm = searchTermHolder.searchTerm,
                 onOverflowMenuClicked = onOverflowMenuClicked,
                 scrollBehavior = scrollBehavior,
-                onSearchForGif = { searchTerm ->
-                    getGifImagesWithSearchTerm( searchTerm )
+                onSearchForGif = { getGifImagesWithSearchTerm()
                 }
             )
         }
@@ -187,7 +188,8 @@ fun HomeScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBar(
-    onSearchForGif: (searchTerm: String) -> Unit,
+    onSearchDisplayChanged: (text: String) -> Unit,
+    onSearchForGif: () -> Unit,
     savedSearchTerm: String,
     onOverflowMenuClicked: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
@@ -199,9 +201,7 @@ fun TopAppBar(
         title = {
             ExpandableSearchView(
                 savedSearchTerm = savedSearchTerm,
-                onSearchDisplayChanged = {
-                    Log.i("ggggg", "search term: " + it)
-                },
+                onSearchDisplayChanged = { text-> onSearchDisplayChanged(text)},
                 onSearchDisplayClosed = {
                     Log.i("ggggg", "search display closed")
                 },
