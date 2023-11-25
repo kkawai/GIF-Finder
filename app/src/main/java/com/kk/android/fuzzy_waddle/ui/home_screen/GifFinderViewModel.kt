@@ -3,9 +3,6 @@ package com.kk.android.fuzzy_waddle.ui.home_screen
 import android.text.TextUtils
 import android.util.Log
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -37,7 +34,7 @@ class GifFinderViewModel(private val gifImageRepository: GifImageRepository) : V
     //var searchTerm: String by mutableStateOf("")
     //    private set
 
-    val stringHolder: StringHolder = StringHolder()
+    val searchTermHolder: SearchTermHolder = SearchTermHolder()
 
     init {
         getGifImages()
@@ -45,8 +42,8 @@ class GifFinderViewModel(private val gifImageRepository: GifImageRepository) : V
 
     fun getGifImagesWithSearchTerm(newSearchTerm: String) {
 
-        if (!stringHolder.searchTerm.equals(newSearchTerm)) {
-            stringHolder.searchTerm = newSearchTerm
+        if (!searchTermHolder.searchTerm.equals(newSearchTerm)) {
+            searchTermHolder.searchTerm = newSearchTerm
             basicSessionImageKey = 1
             _homeScreenState.value.imageCount = 0
             _homeScreenState.value.gifImages = emptyList()
@@ -64,10 +61,10 @@ class GifFinderViewModel(private val gifImageRepository: GifImageRepository) : V
 
     fun getGifImages() {
 
-        if (stringHolder.searchTerm.isNotBlank()) {
+        if (searchTermHolder.searchTerm.isNotBlank()) {
             gifImageRepository.getGifImagesBySearchTerm(
                 skip = _homeScreenState.value.imageCount,
-                searchTerm = stringHolder.searchTerm
+                searchTerm = searchTermHolder.searchTerm
             )
                 .distinctUntilChanged()
                 .onEach { result ->

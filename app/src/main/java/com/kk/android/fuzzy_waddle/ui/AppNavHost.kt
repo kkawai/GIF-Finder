@@ -34,7 +34,7 @@ fun AppNavHost() {
                 onGifImageClicked = { gifImageUrl, gifImageAspectRatio ->
                     navController.navigate(Screen.DetailedGIFScreen.route + "/${gifImageUrl}/${gifImageAspectRatio}")
                 },
-                searchTermHolder = viewModel.stringHolder,
+                searchTermHolder = viewModel.searchTermHolder,
                 stateFlow = viewModel.homeScreenState,
                 getGifImages = {viewModel.getGifImages()},
                 getGifImagesWithSearchTerm = { term -> viewModel.getGifImagesWithSearchTerm(term) },

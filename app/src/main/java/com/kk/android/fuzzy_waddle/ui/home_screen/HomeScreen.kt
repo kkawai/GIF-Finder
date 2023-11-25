@@ -110,7 +110,7 @@ fun HomeScreen(
     onGifImageClicked: (gifImageUrl: String, gifImageAspectRatio: Float) -> Unit,
     retryAction: () -> Unit,
     modifier: Modifier = Modifier,
-    searchTermHolder: StringHolder,
+    searchTermHolder: SearchTermHolder,
 ) {
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
