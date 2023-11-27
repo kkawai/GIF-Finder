@@ -1,5 +1,6 @@
 package com.kk.android.fuzzy_waddle.ui.common
 
+import android.util.Log
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,9 +31,11 @@ fun InfiniteListHandler(
 
     LaunchedEffect(loadMore) {
         snapshotFlow { loadMore.value }
-            .distinctUntilChanged()
+            //.distinctUntilChanged()  not necessary here
             .collect {
+                Log.i("ppppp", "Inside LaunchedEffect(loadMore) " + loadMore.value)
                 if (loadMore.value == true) {
+                    Log.i("ppppp", "Inside LaunchedEffect TRIGGERED")
                     onLoadMore()
                 }
             }
