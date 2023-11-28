@@ -1,7 +1,7 @@
 # GIF-Finder written in Java
 Find GIF images and share with friends.  super fun!  
 
-<a href="https://github.com/kkawai/GIF-Finder/blob/main/">Also check out the Kotlin version</a>
+<a href="https://github.com/kkawai/GIF-Finder/blob/main/">Also check out the version written in Kotlin!</a>
 
 
 [See GIF Finder on Google Play Store](https://play.google.com/store/apps/details?id=com.kk.android.fuzzy_waddle)
